@@ -96,7 +96,7 @@ Representa as turmas escolares.
 
 ### Relacionamentos:
 - Uma turma possui vários alunos
-- Uma turma possui um professor
+- Uma turma possui vários professores
 - Uma turma utiliza uma sala
 
 ---
@@ -110,7 +110,6 @@ Representa as salas de aula da escola.
 |------|------|
 | id | Long |
 | numero | String |
-| bloco | String |
 | capacidade | Integer |
 
 ---
@@ -144,6 +143,7 @@ Representa as salas de aula da escola.
 | Método | Endpoint | Descrição |
 |--------|----------|------------|
 | GET | /professores | Lista professores |
+| GET | /professores/{id} | Busca professor por ID |
 | POST | /professores | Cadastra professor |
 | PUT | /professores/{id} | Atualiza professor |
 | DELETE | /professores/{id} | Remove professor |
@@ -155,6 +155,7 @@ Representa as salas de aula da escola.
 | Método | Endpoint | Descrição |
 |--------|----------|------------|
 | GET | /turmas | Lista turmas |
+| GET | /turmas/{id} | Busca turma por ID |
 | POST | /turmas | Cadastra turma |
 | PUT | /turmas/{id} | Atualiza turma |
 | DELETE | /turmas/{id} | Remove turma |
@@ -175,219 +176,38 @@ Arquitetura REST
 
 A API será desenvolvida seguindo o padrão REST, utilizando métodos HTTP para realizar operações de criação, consulta, atualização e remoção dos dados do sistema.
 
-A base da API será:
+A API estará disponível em:
 
+```
 http://localhost:8080/api
-Rotas da API
-Alunos
-Listar alunos
-GET /api/alunos
+```
 
-Código de resposta
+## Documentação da API
 
-200 OK → Lista retornada com sucesso
-Buscar aluno por ID
-GET /api/alunos/{id}
+A especificação completa de todos os endpoints (rotas, parâmetros, corpos de requisição e resposta, códigos de status) está disponível via **Swagger UI**, gerada automaticamente a partir do código:
 
-Código de resposta
+```
+http://localhost:8080/swagger-ui.html
+```
 
-200 OK → Aluno encontrado
-404 Not Found → Aluno não encontrado
-Cadastrar aluno
-POST /api/alunos
-Exemplo de requisição
-{
-  "nome": "João Silva",
-  "matricula": "2026001",
-  "email": "joao@email.com",
-  "idade": 17
-}
+A especificação em formato OpenAPI (JSON) pode ser acessada em:
 
-Código de resposta
+```
+http://localhost:8080/v3/api-docs
+```
 
-201 Created → Aluno criado com sucesso
-400 Bad Request → Dados inválidos
-Atualizar aluno
-PUT /api/alunos/{id}
+## Visão geral dos recursos
 
-Código de resposta
+A API segue o padrão REST, utilizando os métodos HTTP padrão para operações de criação, consulta, atualização e remoção de dados.
 
-200 OK → Aluno atualizado
-404 Not Found → Aluno não encontrado
-400 Bad Request → Dados inválidos
-Remover aluno
-DELETE /api/alunos/{id}
+| Recurso | Descrição |
+|---|---|
+| `/api/alunos` | Gerenciamento de alunos |
+| `/api/professores` | Gerenciamento de professores |
+| `/api/turmas` | Gerenciamento de turmas, incluindo associação de alunos, professores e salas |
+| `/api/salas` | Gerenciamento de salas de aula |
 
-Código de resposta
-
-204 No Content → Aluno removido
-404 Not Found → Aluno não encontrado
-Professores
-Listar professores
-GET /api/professores
-
-Código de resposta
-
-200 OK → Lista retornada com sucesso
-Buscar professor por ID
-GET /api/professores/{id}
-
-Código de resposta
-
-200 OK → Professor encontrado
-404 Not Found → Professor não encontrado
-Cadastrar professor
-POST /api/professores
-Exemplo de requisição
-{
-  "nome": "Carlos Souza",
-  "disciplina": "Matemática",
-  "email": "carlos@email.com"
-}
-
-Código de resposta
-
-201 Created → Professor criado
-400 Bad Request → Dados inválidos
-Atualizar professor
-PUT /api/professores/{id}
-
-Código de resposta
-
-200 OK → Professor atualizado
-404 Not Found → Professor não encontrado
-Remover professor
-DELETE /api/professores/{id}
-
-Código de resposta
-
-204 No Content → Professor removido
-404 Not Found → Professor não encontrado
-Turmas
-Listar turmas
-GET /api/turmas
-
-Código de resposta
-
-200 OK → Lista retornada com sucesso
-Buscar turma por ID
-GET /api/turmas/{id}
-
-Código de resposta
-
-200 OK → Turma encontrada
-404 Not Found → Turma não encontrada
-Cadastrar turma
-POST /api/turmas
-Exemplo de requisição
-{
-  "nome": "Turma A",
-  "serie": "3º Ano",
-  "turno": "Manhã"
-}
-
-Código de resposta
-
-201 Created → Turma criada
-400 Bad Request → Dados inválidos
-Atualizar turma
-PUT /api/turmas/{id}
-
-Código de resposta
-
-200 OK → Turma atualizada
-404 Not Found → Turma não encontrada
-Remover turma
-DELETE /api/turmas/{id}
-
-Código de resposta
-
-204 No Content → Turma removida
-404 Not Found → Turma não encontrada
-Associar aluno à turma
-POST /api/turmas/{idTurma}/alunos/{idAluno}
-
-Código de resposta
-
-200 OK → Aluno associado à turma
-404 Not Found → Turma ou aluno não encontrado
-400 Bad Request → Associação inválida
-Associar professor à turma
-POST /api/turmas/{idTurma}/professor/{idProfessor}
-
-Código de resposta
-
-200 OK → Professor associado à turma
-404 Not Found → Professor ou turma não encontrado
-Associar sala à turma
-POST /api/turmas/{idTurma}/sala/{idSala}
-
-Código de resposta
-
-200 OK → Sala associada à turma
-404 Not Found → Sala ou turma não encontrada
-Salas
-Listar salas
-GET /api/salas
-
-Código de resposta
-
-200 OK → Lista retornada com sucesso
-Buscar sala por ID
-GET /api/salas/{id}
-
-Código de resposta
-
-200 OK → Sala encontrada
-404 Not Found → Sala não encontrada
-Cadastrar sala
-POST /api/salas
-Exemplo de requisição
-{
-  "numero": "101",
-  "bloco": "A",
-  "capacidade": 40
-}
-
-Código de resposta
-
-201 Created → Sala criada
-400 Bad Request → Dados inválidos
-Atualizar sala
-PUT /api/salas/{id}
-
-Código de resposta
-
-200 OK → Sala atualizada
-404 Not Found → Sala não encontrada
-Remover sala
-DELETE /api/salas/{id}
-
-Código de resposta
-
-204 No Content → Sala removida
-404 Not Found → Sala não encontrada
-Mapeamento das Funcionalidades
-Funcionalidade	Endpoint
-Cadastrar aluno	POST /api/alunos
-Listar alunos	GET /api/alunos
-Buscar aluno por ID	GET /api/alunos/{id}
-Atualizar aluno	PUT /api/alunos/{id}
-Remover aluno	DELETE /api/alunos/{id}
-Cadastrar professor	POST /api/professores
-Listar professores	GET /api/professores
-Buscar professor por ID	GET /api/professores/{id}
-Atualizar professor	PUT /api/professores/{id}
-Remover professor	DELETE /api/professores/{id}
-Cadastrar turma	POST /api/turmas
-Listar turmas	GET /api/turmas
-Buscar turma por ID	GET /api/turmas/{id}
-Atualizar turma	PUT /api/turmas/{id}
-Remover turma	DELETE /api/turmas/{id}
-Associar aluno à turma	POST /api/turmas/{idTurma}/alunos/{idAluno}
-Associar professor à turma	POST /api/turmas/{idTurma}/professor/{idProfessor}
-Associar sala à turma	POST /api/turmas/{idTurma}/sala/{idSala}
-Cadastrar sala	POST /api/salas
+Para detalhes de cada endpoint (parâmetros, exemplos de payload e códigos de resposta), consulte o Swagger UI.
 Listar salas	GET /api/salas
 Buscar sala por ID	GET /api/salas/{id}
 Atualizar sala	PUT /api/salas/{id}
